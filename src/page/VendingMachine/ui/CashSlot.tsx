@@ -1,4 +1,8 @@
-export function CashSlot() {
+interface CashSlotProps {
+  insertedAmount?: number;
+}
+
+export function CashSlot({ insertedAmount = 0 }: CashSlotProps) {
   return (
     <div
       style={{
@@ -21,18 +25,23 @@ export function CashSlot() {
       </div>
       <div
         style={{
-          backgroundColor: "#1a252f",
+          backgroundColor: insertedAmount > 0 ? "#27ae60" : "#1a252f",
           height: "40px",
           borderRadius: "5px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: "#95a5a6",
+          color: insertedAmount > 0 ? "#fff" : "#95a5a6",
           fontSize: "12px",
-          border: "2px dashed #7f8c8d",
+          border:
+            insertedAmount > 0 ? "2px solid #229954" : "2px dashed #7f8c8d",
+          fontWeight: insertedAmount > 0 ? "bold" : "normal",
+          transition: "all 0.3s",
         }}
       >
-        지폐를 넣어주세요
+        {insertedAmount > 0
+          ? `${insertedAmount.toLocaleString()}원 투입됨`
+          : "지폐를 넣어주세요"}
       </div>
     </div>
   );

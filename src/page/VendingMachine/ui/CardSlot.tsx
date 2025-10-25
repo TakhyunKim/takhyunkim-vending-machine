@@ -1,4 +1,8 @@
-export function CardSlot() {
+interface CardSlotProps {
+  isInserted?: boolean;
+}
+
+export function CardSlot({ isInserted = false }: CardSlotProps) {
   return (
     <div
       style={{
@@ -21,18 +25,20 @@ export function CardSlot() {
       </div>
       <div
         style={{
-          backgroundColor: "#1a252f",
+          backgroundColor: isInserted ? "#27ae60" : "#1a252f",
           height: "40px",
           borderRadius: "5px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: "#95a5a6",
+          color: isInserted ? "#fff" : "#95a5a6",
           fontSize: "12px",
-          border: "2px dashed #7f8c8d",
+          border: isInserted ? "2px solid #229954" : "2px dashed #7f8c8d",
+          fontWeight: isInserted ? "bold" : "normal",
+          transition: "all 0.3s",
         }}
       >
-        카드를 넣어주세요
+        {isInserted ? "✓ 카드 투입됨" : "카드를 넣어주세요"}
       </div>
     </div>
   );
