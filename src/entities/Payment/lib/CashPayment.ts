@@ -24,12 +24,6 @@ export class CashPayment implements Payment {
       throw new Error("Invalid amount");
     }
 
-    if (this.balance < amount) {
-      throw new Error("Insufficient balance");
-    }
-
-    this.balance -= amount;
-
     const paymentId = generateUuid(amount.toString());
     return paymentId;
   }

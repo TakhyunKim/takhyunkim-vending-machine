@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { CASH_PAYMENT, SAMSUNG_CARD_PAYMENT } from "../mock";
 
-import type { Payment } from "@/entities/Payment";
+import { CashPayment, type Payment } from "@/entities/Payment";
 import type { VendingMachine } from "@/entities/VendingMachine/lib";
 
 export function useVendingMachinePayment({
@@ -26,7 +26,7 @@ export function useVendingMachinePayment({
     }
 
     vendingMachine.initPayment(cashPayment, amount);
-    setUserPayment(cashPayment);
+    setUserPayment(new CashPayment(amount));
   };
 
   // 카드 투입 핸들러
