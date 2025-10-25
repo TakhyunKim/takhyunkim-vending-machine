@@ -1,12 +1,16 @@
+import { useState } from "react";
 import { ProductDisplay } from "./ProductDisplay";
 import { CardSlot } from "./CardSlot";
 import { CashSlot } from "./CashSlot";
 import { DispenseSlot } from "./DispenseSlot";
 import { ChangeSlot } from "./ChangeSlot";
+import { Wallet } from "./Wallet";
 
 import { PRODUCTS_MOCK_LIST, DISPENSER_MOCK, CHANGE_MOCK } from "../mock";
 import { VendingMachine } from "@/entities/VendingMachine/lib";
 
+// TODO: 나중에 실제 자판기 로직 구현 시 사용
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const vendingMachine = new VendingMachine(
   PRODUCTS_MOCK_LIST,
   DISPENSER_MOCK,
@@ -14,22 +18,72 @@ const vendingMachine = new VendingMachine(
 );
 
 export function VendingMachinePage() {
+  // 사용자 지갑 상태
+  const [userCash, setUserCash] = useState(50000); // 보유 현금
+  const [hasCard, setHasCard] = useState(true); // 카드 보유 여부
+
+  // 자판기 상태
+  const [insertedCash, setInsertedCash] = useState(0); // 투입된 현금
+  const [isCardInserted, setIsCardInserted] = useState(false); // 카드 투입 여부
+
+  // 현금 투입 핸들러
+  const handleInsertCash = (amount: number) => {
+    if (userCash >= amount) {
+      setUserCash((prev) => prev - amount);
+      setInsertedCash((prev) => prev + amount);
+    }
+  };
+
+  // 카드 투입 핸들러
+  const handleInsertCard = () => {
+    setHasCard(false);
+    setIsCardInserted(true);
+  };
+
   return (
-    <Container>
-      <Header>🥤 VENDING MACHINE</Header>
+    <VendingMachineContainer>
+      {/* 지갑 */}
+      <Wallet
+        cash={userCash}
+        onInsertCash={handleInsertCash}
+        onInsertCard={handleInsertCard}
+        hasCard={hasCard}
+      />
 
-      <ProductDisplay products={PRODUCTS_MOCK_LIST} />
+      {/* 자판기 */}
+      <Container>
+        <Header>🥤 VENDING MACHINE</Header>
 
-      <Content>
-        <PaymentSection>
-          <CardSlot />
-          <CashSlot />
-        </PaymentSection>
-        <DispenseSlot />
-      </Content>
+        <ProductDisplay products={PRODUCTS_MOCK_LIST} />
 
-      <ChangeSlot />
-    </Container>
+        <Content>
+          <PaymentSection>
+            <CardSlot isInserted={isCardInserted} />
+            <CashSlot insertedAmount={insertedCash} />
+          </PaymentSection>
+          <DispenseSlot />
+        </Content>
+
+        <ChangeSlot />
+      </Container>
+    </VendingMachineContainer>
+  );
+}
+
+function VendingMachineContainer({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        gap: "30px",
+        padding: "40px",
+        minHeight: "100vh",
+        backgroundColor: "#1a1a2e",
+        alignItems: "flex-start",
+      }}
+    >
+      {children}
+    </div>
   );
 }
 
