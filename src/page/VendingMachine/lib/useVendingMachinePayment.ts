@@ -10,67 +10,54 @@ export function useVendingMachinePayment({
 }: {
   vendingMachine: VendingMachine;
 }) {
-  const [insertedCash, setInsertedCash] = useState(0); // 투입된 현금
-  const [isCardInserted, setIsCardInserted] = useState(false); // 카드 투입 여부
   const [userPayment, setUserPayment] = useState<Payment | null>(null);
 
   const cashPayment = CASH_PAYMENT;
-  const cashBalance = cashPayment.getBalance();
-
   const cardPayment = SAMSUNG_CARD_PAYMENT;
 
   // 현금 투입 핸들러
   const handleInsertCash = async (amount: number) => {
+    const isCardInserted = userPayment === cardPayment;
+
     if (isCardInserted) {
-      // TODO: 이미 카드를 투입했다는 알림을 추가
       console.error("이미 카드를 투입했습니다");
       return;
     }
 
-    if (cashBalance < amount) {
-      // TODO: 차후 현금 부족 알림을 추가
-      console.error("현금 부족");
-      return;
-    }
-
-    await vendingMachine.initPayment(cashPayment, amount);
-
-    setInsertedCash((prev) => prev + amount);
+    vendingMachine.initPayment(cashPayment, amount);
     setUserPayment(cashPayment);
   };
 
   // 카드 투입 핸들러
   const handleInsertCard = async () => {
-    if (insertedCash > 0) {
-      // TODO: 이미 현금을 투입했다는 알림을 추가
+    const isCashInserted = userPayment === cashPayment;
+
+    if (isCashInserted) {
       console.error("이미 현금을 투입했습니다");
       return;
     }
 
-    await vendingMachine.initPayment(cardPayment, {});
-    setIsCardInserted(true);
+    vendingMachine.initPayment(cardPayment, 0);
     setUserPayment(cardPayment);
   };
 
-  const handleCompleteTransaction = async () => {
+  const handleCompleteTransaction = () => {
     if (!userPayment) {
       console.error("결제 수단이 없습니다");
       return;
     }
 
-    vendingMachine.dispenseChange(userPayment);
-
+    vendingMachine.dispenseChange();
     setUserPayment(null);
-    setInsertedCash(0);
-    setIsCardInserted(false);
   };
 
   return {
-    userCash: cashBalance,
+    userCash: cashPayment.getBalance(),
     userCardPayment: cardPayment,
     userPayment,
-    insertedCash,
-    isCardInserted,
+    hasCard: userPayment === cardPayment,
+    insertedCash: vendingMachine.getCashBalance(),
+    insertedCard: userPayment === cardPayment,
     handleInsertCash,
     handleInsertCard,
     handleCompleteTransaction,

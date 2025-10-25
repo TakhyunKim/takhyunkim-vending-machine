@@ -11,9 +11,5 @@ import type { CardPaymentInfo } from "../model";
  */
 export abstract class CardGateway {
   abstract authorize(card: CardPaymentInfo): Promise<{ paymentId: string }>;
-  abstract purchase(
-    paymentId: string,
-    amount: number
-  ): Promise<{ paymentId: string }>;
-  abstract cancel(paymentId: string): Promise<{ paymentId: string }>;
+  abstract purchase(amount: number): Promise<{ paymentId: string }>;
 }

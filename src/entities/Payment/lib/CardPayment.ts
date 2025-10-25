@@ -1,15 +1,13 @@
 import { Payment } from "./Payment";
 import { CardGateway } from "./CardGateway";
 
-import type { CardPaymentInfo, PaymentState } from "../model";
+import type { CardPaymentInfo } from "../model";
 
 export class CardPayment implements Payment {
-  private state: PaymentState;
   private readonly info: CardPaymentInfo;
   private readonly cardGateway: CardGateway;
 
   constructor(info: CardPaymentInfo, cardGateway: CardGateway) {
-    this.state = { state: "idle", balance: 0 };
     this.info = info;
     this.cardGateway = cardGateway;
   }
@@ -22,13 +20,7 @@ export class CardPayment implements Payment {
    */
   async authorize() {
     const { paymentId } = await this.cardGateway.authorize(this.info);
-    this.state = {
-      state: "authorized",
-      paymentId,
-      balance: 0,
-    };
-
-    return this.state;
+    return paymentId;
   }
 
   /**
@@ -36,32 +28,8 @@ export class CardPayment implements Payment {
    *
    * 카드로 구매하는 과정
    */
-  async purchase(id: string, amount: number) {
-    const { paymentId } = await this.cardGateway.purchase(id, amount);
-    this.state = { state: "purchased", paymentId, balance: 0 };
-
-    return this.state;
-  }
-
-  /**
-   * @description 결제 취소
-   *
-   * 결제를 취소하는 과정
-   * 결제 취소된 상태
-   */
-  async cancel(paymentId: string) {
-    await this.cardGateway.cancel(paymentId);
-    this.state = { state: "canceled", paymentId, balance: 0 };
-
-    return this.state;
-  }
-
-  done() {
-    this.state = { state: "idle", balance: 0 };
-    return this.state;
-  }
-
-  getBalance() {
-    return this.state.balance;
+  async purchase(amount: number) {
+    const { paymentId } = await this.cardGateway.purchase(amount);
+    return paymentId;
   }
 }

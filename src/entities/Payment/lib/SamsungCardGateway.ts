@@ -17,13 +17,9 @@ export class SamsungCardGateway extends CardGateway {
     return Promise.resolve({ paymentId: generateUuid(card.cardNumber) });
   }
 
-  purchase(paymentId: string, amount: number): Promise<{ paymentId: string }> {
+  purchase(amount: number): Promise<{ paymentId: string }> {
     return Promise.resolve({
-      paymentId: generateUuid(`${paymentId}-${amount}`),
+      paymentId: generateUuid(String(amount)),
     });
-  }
-
-  cancel(paymentId: string): Promise<{ paymentId: string }> {
-    return Promise.resolve({ paymentId: generateUuid(paymentId) });
   }
 }

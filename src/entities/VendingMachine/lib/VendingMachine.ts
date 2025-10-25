@@ -1,31 +1,29 @@
-import type { VendingMachineState } from "../model";
-
 import type { Product } from "../../Product/lib";
 import type { Payment } from "../../Payment/lib";
 import type { Dispenser } from "../../Dispenser/lib";
 import type { Change } from "../../Change/lib";
 
 export class VendingMachine {
-  private state: VendingMachineState;
   private readonly products: Product[];
   private readonly dispenser: Dispenser;
   private readonly change: Change;
+  // 자판기 내에 현금 잔액
+  private cashBalance: number;
 
   constructor(products: Product[], dispenser: Dispenser, change: Change) {
     this.products = products;
     this.dispenser = dispenser;
     this.change = change;
-    this.state = { state: "idle", paymentId: undefined };
+    this.cashBalance = 0;
   }
 
-  async initPayment(payment: Payment, info: unknown) {
+  initPayment(payment: Payment, amount: number) {
     // 잔돈 한도 초과 체크
     this.change.checkLimitBalance();
 
     // 결제 수단 승인
-    const authorizedState = await this.authorizePayment(payment, info);
-
-    return authorizedState;
+    const paymentId = payment.authorize(amount);
+    return paymentId;
   }
 
   /**
@@ -37,15 +35,13 @@ export class VendingMachine {
    */
   async buyProduct(payment: Payment, product: Product) {
     // 상품 선택
-    const selectedState = this.selectProduct(product.id);
+    this.selectProduct(product.id);
 
     // 상품 구매
-    await payment.purchase(selectedState.paymentId, product.price);
+    payment.purchase(product.price);
 
     // 상품 배출
     this.dispenseProduct(product.id);
-
-    return this.state;
   }
 
   /**
@@ -55,45 +51,22 @@ export class VendingMachine {
    *
    * @param payment 결제 수단
    */
-  dispenseChange(payment: Payment) {
-    const change = this.change.getChange(payment.getBalance());
+  dispenseChange() {
+    const change = this.change.getChange(this.cashBalance);
     const totalChange = Object.values(change).reduce(
       (acc, curr) => acc + curr,
       0
     );
 
-    this.state = {
-      state: "change",
-      change: totalChange,
-    };
-
-    return this.state;
+    return totalChange;
   }
 
   getProducts() {
     return this.products;
   }
 
-  /**
-   * @description 결제 수단 승인
-   *
-   * @param payment 결제 수단
-   * @param info 결제 정보
-   * @returns 결제 승인 번호
-   */
-  private async authorizePayment(payment: Payment, info: unknown) {
-    const { paymentId } = await payment.authorize(info);
-
-    if (!paymentId) {
-      throw new Error("Payment ID not found");
-    }
-
-    this.state = {
-      state: "authorized",
-      paymentId,
-    };
-
-    return this.state;
+  getCashBalance() {
+    return this.cashBalance;
   }
 
   /**
@@ -112,16 +85,9 @@ export class VendingMachine {
     if (!product.isInStock()) {
       throw new Error("Product is out of stock");
     }
-
-    if (this.state.state !== "authorized") {
-      throw new Error("Payment not authorized");
-    }
-
-    return this.state;
   }
 
   private dispenseProduct(productId: string) {
-    // product 배출을 하는데 차감도 진행해야함
     const product = this.products.find(({ id }) => id === productId);
 
     if (!product) {

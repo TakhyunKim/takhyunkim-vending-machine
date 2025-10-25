@@ -1,5 +1,3 @@
-import type { PaymentState } from "../model";
-
 /**
  * @description 결제 인터페이스
  *
@@ -17,7 +15,7 @@ export abstract class Payment {
    * @param info 결제 정보(cash: 현금 결제 금액, card: 카드 결제 정보)
    * @returns 결제 승인 번호
    */
-  abstract authorize(info: unknown): Promise<PaymentState>;
+  abstract authorize(info: unknown): void;
 
   /**
    * @description 결제 구매
@@ -28,23 +26,5 @@ export abstract class Payment {
    * @param amount 결제 금액
    * @returns 결제 완료 번호
    */
-  abstract purchase(paymentId: string, amount: number): Promise<PaymentState>;
-
-  /**
-   * @description 결제 취소
-   *
-   * 결제를 취소하는 과정
-   * 결제 취소된 상태
-   */
-  abstract cancel(paymentId: string): Promise<PaymentState>;
-
-  /**
-   * @description 결제 완료
-   *
-   * 결제를 완료하는 과정
-   * 결제 완료된 상태
-   */
-  abstract done(): PaymentState;
-
-  abstract getBalance(): number;
+  abstract purchase(amount: number): void;
 }

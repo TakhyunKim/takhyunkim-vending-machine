@@ -13,9 +13,9 @@ export function VendingMachinePage() {
   const { vendingMachine } = useVendingMachine();
   const {
     userCash,
-    insertedCash,
-    isCardInserted,
     userPayment,
+    insertedCash,
+    insertedCard,
     handleInsertCash,
     handleInsertCard,
     handleCompleteTransaction,
@@ -33,7 +33,7 @@ export function VendingMachinePage() {
         cash={userCash}
         onInsertCash={handleInsertCash}
         onInsertCard={handleInsertCard}
-        hasCard={!isCardInserted}
+        hasCard={!insertedCard}
       />
 
       {/* 자판기 */}
@@ -47,7 +47,7 @@ export function VendingMachinePage() {
 
         <Content>
           <PaymentSection>
-            <CardSlot isInserted={isCardInserted} />
+            <CardSlot isInserted={insertedCard} />
             <CashSlot insertedAmount={insertedCash} />
           </PaymentSection>
           <DispenseSlot boughtProducts={boughtProducts} />
@@ -58,7 +58,7 @@ export function VendingMachinePage() {
         {/* 거래 완료 버튼 */}
         <CompleteButton
           disabled={
-            boughtProducts.length === 0 && !isCardInserted && insertedCash === 0
+            boughtProducts.length === 0 && !insertedCard && insertedCash === 0
           }
           onClick={handleCompleteTransaction}
         />
