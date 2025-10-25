@@ -33,4 +33,8 @@ export class CardPayment implements Payment {
   done() {
     return;
   }
+
+  getBalance() {
+    return 0;
+  }
 }

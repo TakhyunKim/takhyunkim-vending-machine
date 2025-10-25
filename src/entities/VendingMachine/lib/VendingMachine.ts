@@ -100,14 +100,12 @@ export class VendingMachine {
    *
    * @param payment 결제 수단
    */
-  dispenseChange(payment: Payment) {
+  dispenseChange() {
     const change = this.change.getChange(this.snapshot.cashBalance);
     const totalChange = Object.entries(change).reduce(
       (acc, [key, value]) => acc + value * Number(key),
       0
     );
-
-    payment.done(totalChange);
 
     // 잔액 초기화
     this.snapshot = {
@@ -117,6 +115,8 @@ export class VendingMachine {
 
     // 상태 변경 알림
     this.notifyListeners();
+
+    return totalChange;
   }
 
   /**
