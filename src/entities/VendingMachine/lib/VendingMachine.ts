@@ -73,6 +73,10 @@ export class VendingMachine {
     }
   }
 
+  getProducts() {
+    return this.products;
+  }
+
   /**
    * @description 결제 수단 승인
    *
