@@ -66,6 +66,8 @@ export class VendingMachine {
       state: "change",
       change: totalChange,
     };
+
+    return this.state;
   }
 
   getProducts() {

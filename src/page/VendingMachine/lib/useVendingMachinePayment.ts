@@ -52,6 +52,19 @@ export function useVendingMachinePayment({
     setUserPayment(cardPayment);
   };
 
+  const handleCompleteTransaction = async () => {
+    if (!userPayment) {
+      console.error("결제 수단이 없습니다");
+      return;
+    }
+
+    vendingMachine.dispenseChange(userPayment);
+
+    setUserPayment(null);
+    setInsertedCash(0);
+    setIsCardInserted(false);
+  };
+
   return {
     userCash: cashBalance,
     userCardPayment: cardPayment,
@@ -60,5 +73,6 @@ export function useVendingMachinePayment({
     isCardInserted,
     handleInsertCash,
     handleInsertCard,
+    handleCompleteTransaction,
   };
 }
