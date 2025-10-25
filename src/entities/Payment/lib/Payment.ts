@@ -28,7 +28,5 @@ export abstract class Payment {
    */
   abstract purchase(amount: number): void;
 
-  abstract done(amount: number): void;
-
   abstract getBalance(): number;
 }

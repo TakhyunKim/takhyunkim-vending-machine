@@ -30,10 +30,6 @@ export class CardPayment implements Payment {
     return generateUuid(String(amount));
   }
 
-  done() {
-    return;
-  }
-
   getBalance() {
     return 0;
   }
