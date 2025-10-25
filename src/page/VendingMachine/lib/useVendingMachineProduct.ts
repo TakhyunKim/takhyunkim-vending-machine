@@ -16,14 +16,16 @@ export function useVendingMachineProduct({
   const buyProduct = (product: Product) => {
     try {
       if (!payment) {
-        throw new Error("Payment not found");
+        alert("결제 수단이 없습니다");
+        return;
       }
 
       vendingMachine.buyProduct(payment, product.id);
 
       setBoughtProducts((prev) => [...prev, product]);
-    } catch (error) {
-      console.error(error);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_error: unknown) {
+      alert("상품 구매에 실패했습니다");
     }
   };
 

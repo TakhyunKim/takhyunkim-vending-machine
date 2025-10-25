@@ -22,7 +22,7 @@ export function useVendingMachinePayment({
     const isCardInserted = userPayment instanceof CardPayment;
 
     if (isCardInserted) {
-      console.error("이미 카드를 투입했습니다");
+      alert("이미 카드를 투입했습니다");
       return;
     }
 
@@ -41,7 +41,7 @@ export function useVendingMachinePayment({
     const isCashInserted = userPayment instanceof CashPayment;
 
     if (isCashInserted) {
-      console.error("이미 현금을 투입했습니다");
+      alert("이미 현금을 투입했습니다");
       return;
     }
 
@@ -51,7 +51,7 @@ export function useVendingMachinePayment({
 
   const dispenseChange = () => {
     if (!userPayment) {
-      console.error("결제 수단이 없습니다");
+      alert("결제 수단이 없습니다");
       return;
     }
 
