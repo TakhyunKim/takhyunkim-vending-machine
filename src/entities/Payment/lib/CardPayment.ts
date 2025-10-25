@@ -5,10 +5,12 @@ import type { CardPaymentInfo, PaymentState } from "../model";
 
 export class CardPayment implements Payment {
   private state: PaymentState;
+  private readonly info: CardPaymentInfo;
   private readonly cardGateway: CardGateway;
 
-  constructor(cardGateway: CardGateway) {
+  constructor(info: CardPaymentInfo, cardGateway: CardGateway) {
     this.state = { state: "idle", balance: 0 };
+    this.info = info;
     this.cardGateway = cardGateway;
   }
 
@@ -18,8 +20,8 @@ export class CardPayment implements Payment {
    * 카드사에서 승인 번호를 받은 상태로 실제 돈이 빠져나가지 않은 상태
    * 결제 가능하다는 점을 카드사로부터 확인 받은 상태
    */
-  async authorize(card: CardPaymentInfo) {
-    const { paymentId } = await this.cardGateway.authorize(card);
+  async authorize() {
+    const { paymentId } = await this.cardGateway.authorize(this.info);
     this.state = {
       state: "authorized",
       paymentId,
