@@ -19,7 +19,7 @@ export function VendingMachinePage() {
     handleInsertCash,
     handleInsertCard,
   } = useVendingMachinePayment({ vendingMachine });
-  const { products } = useVendingMachineProduct({
+  const { products, handleSelectProduct } = useVendingMachineProduct({
     vendingMachine,
     payment: userPayment,
   });
@@ -38,7 +38,10 @@ export function VendingMachinePage() {
       <Container>
         <Header>🥤 VENDING MACHINE</Header>
 
-        <ProductDisplay products={products} />
+        <ProductDisplay
+          products={products}
+          onSelectProduct={(product) => handleSelectProduct(product)}
+        />
 
         <Content>
           <PaymentSection>

@@ -1,6 +1,14 @@
-import type { Product } from "@/entities/Product/model";
+import type { Product } from "@/entities/Product/lib";
 
-export function ProductDisplay({ products }: { products: Product[] }) {
+interface ProductDisplayProps {
+  products: Product[];
+  onSelectProduct: (product: Product) => void;
+}
+
+export function ProductDisplay({
+  products,
+  onSelectProduct,
+}: ProductDisplayProps) {
   return (
     <div
       style={{
@@ -49,6 +57,7 @@ export function ProductDisplay({ products }: { products: Product[] }) {
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "scale(1)";
             }}
+            onClick={() => onSelectProduct(product)}
           >
             <div
               style={{
