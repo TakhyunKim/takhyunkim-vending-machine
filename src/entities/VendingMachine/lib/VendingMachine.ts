@@ -153,6 +153,9 @@ export class VendingMachine {
       products: [...this.snapshot.products],
     };
 
-    this.dispenser.dispense(productId);
+    const productPosition = this.snapshot.products.findIndex(
+      ({ id }) => id === productId
+    );
+    this.dispenser.dispense(productPosition);
   }
 }
