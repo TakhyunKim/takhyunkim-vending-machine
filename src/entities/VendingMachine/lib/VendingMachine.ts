@@ -59,10 +59,14 @@ export class VendingMachine {
   dispenseChange(payment: Payment) {
     try {
       const change = this.change.getChange(payment.getBalance());
+      const totalChange = Object.values(change).reduce(
+        (acc, curr) => acc + curr,
+        0
+      );
 
       this.state = {
         state: "change",
-        change: Object.values(change).reduce((acc, curr) => acc + curr, 0),
+        change: totalChange,
       };
     } catch (error) {
       throw new Error("Failed to dispense change", { cause: error });
