@@ -40,7 +40,7 @@ export class VendingMachine {
     const selectedState = this.selectProduct(product.id);
 
     // 상품 구매
-    await payment.purchase(selectedState.paymentId!, product.price);
+    await payment.purchase(selectedState.paymentId, product.price);
 
     // 상품 배출
     this.dispenseProduct(product.id);
@@ -48,6 +48,13 @@ export class VendingMachine {
     return this.state;
   }
 
+  /**
+   * @description 잔돈 배출
+   *
+   * 결제 수단의 잔액을 참조하여 잔돈을 배출하는 과정
+   *
+   * @param payment 결제 수단
+   */
   dispenseChange(payment: Payment) {
     const change = this.change.getChange(payment.getBalance());
     const totalChange = Object.values(change).reduce(
@@ -118,10 +125,14 @@ export class VendingMachine {
   }
 
   private dispenseProduct(productId: string) {
-    if (this.state.state !== "purchased") {
-      throw new Error("Product not purchased");
+    // product 배출을 하는데 차감도 진행해야함
+    const product = this.products.find(({ id }) => id === productId);
+
+    if (!product) {
+      throw new Error("Product not found");
     }
 
+    product.decreaseQuantity();
     this.dispenser.dispense(productId);
 
     this.state = { state: "dispensing", productId };
