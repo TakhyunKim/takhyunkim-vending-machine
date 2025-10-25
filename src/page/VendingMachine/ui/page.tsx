@@ -19,10 +19,11 @@ export function VendingMachinePage() {
     handleInsertCash,
     handleInsertCard,
   } = useVendingMachinePayment({ vendingMachine });
-  const { products, handleSelectProduct } = useVendingMachineProduct({
-    vendingMachine,
-    payment: userPayment,
-  });
+  const { products, boughtProducts, handleBoughtProduct } =
+    useVendingMachineProduct({
+      vendingMachine,
+      payment: userPayment,
+    });
 
   return (
     <VendingMachineContainer>
@@ -40,7 +41,7 @@ export function VendingMachinePage() {
 
         <ProductDisplay
           products={products}
-          onSelectProduct={(product) => handleSelectProduct(product)}
+          onBoughtProduct={(product) => handleBoughtProduct(product)}
         />
 
         <Content>
@@ -48,7 +49,7 @@ export function VendingMachinePage() {
             <CardSlot isInserted={isCardInserted} />
             <CashSlot insertedAmount={insertedCash} />
           </PaymentSection>
-          <DispenseSlot />
+          <DispenseSlot boughtProducts={boughtProducts} />
         </Content>
 
         <ChangeSlot />

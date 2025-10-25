@@ -2,12 +2,12 @@ import type { Product } from "@/entities/Product/lib";
 
 interface ProductDisplayProps {
   products: Product[];
-  onSelectProduct: (product: Product) => void;
+  onBoughtProduct: (product: Product) => void;
 }
 
 export function ProductDisplay({
   products,
-  onSelectProduct,
+  onBoughtProduct,
 }: ProductDisplayProps) {
   return (
     <div
@@ -57,7 +57,7 @@ export function ProductDisplay({
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "scale(1)";
             }}
-            onClick={() => onSelectProduct(product)}
+            onClick={() => onBoughtProduct(product)}
           >
             <div
               style={{

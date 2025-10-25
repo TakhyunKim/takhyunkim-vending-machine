@@ -11,9 +11,9 @@ export function useVendingMachineProduct({
   payment: Payment | null;
   vendingMachine: VendingMachine;
 }) {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [boughtProducts, setBoughtProducts] = useState<Product[]>([]);
 
-  const handleSelectProduct = async (product: Product) => {
+  const handleBoughtProduct = async (product: Product) => {
     try {
       if (!payment) {
         throw new Error("Payment not found");
@@ -21,7 +21,7 @@ export function useVendingMachineProduct({
 
       await vendingMachine.buyProduct(payment, product);
 
-      setSelectedProduct(product);
+      setBoughtProducts((prev) => [...prev, product]);
     } catch (error) {
       console.error(error);
     }
@@ -31,7 +31,7 @@ export function useVendingMachineProduct({
 
   return {
     products,
-    selectedProduct,
-    handleSelectProduct,
+    boughtProducts,
+    handleBoughtProduct,
   };
 }

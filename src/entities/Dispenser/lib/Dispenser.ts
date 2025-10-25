@@ -8,14 +8,6 @@ export class Dispenser {
   }
 
   dispense(productId: string) {
-    this.state = { state: "dispensing", productId };
-
-    const randomResult = Math.random();
-
-    if (randomResult < 0.5) {
-      throw new Error("Dispenser failed");
-    }
-
     this.state = { state: "done", productId };
   }
 }

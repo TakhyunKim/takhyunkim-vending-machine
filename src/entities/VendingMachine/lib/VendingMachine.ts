@@ -115,12 +115,6 @@ export class VendingMachine {
       throw new Error("Payment not authorized");
     }
 
-    this.state = {
-      state: "selecting",
-      productId,
-      paymentId: this.state.paymentId,
-    };
-
     return this.state;
   }
 
@@ -134,7 +128,5 @@ export class VendingMachine {
 
     product.decreaseQuantity();
     this.dispenser.dispense(productId);
-
-    this.state = { state: "dispensing", productId };
   }
 }
