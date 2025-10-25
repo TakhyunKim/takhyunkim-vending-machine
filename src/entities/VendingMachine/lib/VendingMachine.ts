@@ -33,7 +33,7 @@ export class VendingMachine {
    * @param paymentId 결제 승인 번호
    * @returns 상품 구매 번호
    */
-  async buyProduct(payment: Payment, product: Product) {
+  buyProduct(payment: Payment, product: Product) {
     // 상품 선택
     this.selectProduct(product.id);
 

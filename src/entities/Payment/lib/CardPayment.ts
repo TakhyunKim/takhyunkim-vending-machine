@@ -17,8 +17,8 @@ export class CardPayment implements Payment {
    * 카드사에서 승인 번호를 받은 상태로 실제 돈이 빠져나가지 않은 상태
    * 결제 가능하다는 점을 카드사로부터 확인 받은 상태
    */
-  async authorize() {
-    return Promise.resolve({ paymentId: generateUuid(this.info.cardNumber) });
+  authorize() {
+    return generateUuid(this.info.cardNumber);
   }
 
   /**
@@ -26,9 +26,7 @@ export class CardPayment implements Payment {
    *
    * 카드로 구매하는 과정
    */
-  async purchase(amount: number) {
-    return Promise.resolve({
-      paymentId: generateUuid(String(amount)),
-    });
+  purchase(amount: number) {
+    return generateUuid(String(amount));
   }
 }

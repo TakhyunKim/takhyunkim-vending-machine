@@ -17,7 +17,7 @@ export class CashPayment implements Payment {
    * 현금으로 결제를 승인하는 과정
    * 사용자가 사용가능한 결제 수단을 활용했는지 체크하는 과정
    */
-  async authorize(amount: number) {
+  authorize(amount: number) {
     const isAccepted = ACCEPTED_CACHE_LIST.some((cache) => cache === amount);
 
     if (!isAccepted) {
@@ -33,7 +33,7 @@ export class CashPayment implements Payment {
    *
    * 현금으로 구매하는 과정
    */
-  async purchase(amount: number) {
+  purchase(amount: number) {
     if (this.balance < amount) {
       throw new Error("Insufficient balance");
     }

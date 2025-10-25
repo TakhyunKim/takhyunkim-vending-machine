@@ -16,7 +16,7 @@ export function useVendingMachinePayment({
   const cardPayment = SAMSUNG_CARD_PAYMENT;
 
   // 현금 투입 핸들러
-  const handleInsertCash = async (amount: number) => {
+  const handleInsertCash = (amount: number) => {
     const isCardInserted = userPayment === cardPayment;
 
     if (isCardInserted) {
@@ -29,7 +29,7 @@ export function useVendingMachinePayment({
   };
 
   // 카드 투입 핸들러
-  const handleInsertCard = async () => {
+  const handleInsertCard = () => {
     const isCashInserted = userPayment === cashPayment;
 
     if (isCashInserted) {

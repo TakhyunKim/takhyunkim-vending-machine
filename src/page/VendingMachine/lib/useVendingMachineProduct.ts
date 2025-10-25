@@ -13,13 +13,13 @@ export function useVendingMachineProduct({
 }) {
   const [boughtProducts, setBoughtProducts] = useState<Product[]>([]);
 
-  const handleBoughtProduct = async (product: Product) => {
+  const handleBoughtProduct = (product: Product) => {
     try {
       if (!payment) {
         throw new Error("Payment not found");
       }
 
-      await vendingMachine.buyProduct(payment, product);
+      vendingMachine.buyProduct(payment, product);
 
       setBoughtProducts((prev) => [...prev, product]);
     } catch (error) {
