@@ -4,12 +4,21 @@ import { CashSlot } from "./CashSlot";
 import { DispenseSlot } from "./DispenseSlot";
 import { ChangeSlot } from "./ChangeSlot";
 
+import { PRODUCTS_MOCK_LIST, DISPENSER_MOCK, CHANGE_MOCK } from "../mock";
+import { VendingMachine } from "@/entities/VendingMachine/lib";
+
+const vendingMachine = new VendingMachine(
+  PRODUCTS_MOCK_LIST,
+  DISPENSER_MOCK,
+  CHANGE_MOCK
+);
+
 export function VendingMachinePage() {
   return (
     <Container>
       <Header>🥤 VENDING MACHINE</Header>
 
-      <ProductDisplay />
+      <ProductDisplay products={PRODUCTS_MOCK_LIST} />
 
       <Content>
         <PaymentSection>

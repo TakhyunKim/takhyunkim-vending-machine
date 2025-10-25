@@ -1,11 +1,13 @@
-export function ProductDisplay() {
+import type { Product } from "@/entities/Product/model";
+
+export function ProductDisplay({ products }: { products: Product[] }) {
   return (
     <div
       style={{
         backgroundColor: "#34495e",
         borderRadius: "15px",
         padding: "15px",
-        height: "350px",
+        height: "150px",
         border: "3px solid #1a252f",
       }}
     >
@@ -27,7 +29,7 @@ export function ProductDisplay() {
           height: "calc(100% - 30px)",
         }}
       >
-        {Array.from({ length: 9 }).map((_, idx) => (
+        {products.map((product, idx) => (
           <div
             key={idx}
             style={{
@@ -48,7 +50,23 @@ export function ProductDisplay() {
               e.currentTarget.style.transform = "scale(1)";
             }}
           >
-            🥤
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              🥤{" "}
+              <p style={{ fontSize: "12px", color: "#000000" }}>
+                {" "}
+                {product.name}{" "}
+              </p>
+              <div style={{ fontSize: "12px", color: "#000000" }}>
+                {product.price}원
+              </div>
+            </div>
           </div>
         ))}
       </div>
