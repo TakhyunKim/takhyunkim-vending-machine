@@ -18,9 +18,9 @@ export function VendingMachinePage() {
     insertedCard,
     handleInsertCash,
     handleInsertCard,
-    handleCompleteTransaction,
+    dispenseChange,
   } = useVendingMachinePayment({ vendingMachine });
-  const { products, boughtProducts, handleBoughtProduct } =
+  const { products, boughtProducts, buyProduct, resetBoughtProducts } =
     useVendingMachineProduct({
       vendingMachine,
       payment: userPayment,
@@ -42,7 +42,7 @@ export function VendingMachinePage() {
 
         <ProductDisplay
           products={products}
-          onBoughtProduct={(product) => handleBoughtProduct(product)}
+          onBoughtProduct={(product) => buyProduct(product)}
         />
 
         <Content>
@@ -60,7 +60,10 @@ export function VendingMachinePage() {
           disabled={
             boughtProducts.length === 0 && !insertedCard && insertedCash === 0
           }
-          onClick={handleCompleteTransaction}
+          onClick={() => {
+            dispenseChange();
+            resetBoughtProducts();
+          }}
         />
       </Container>
     </VendingMachineContainer>

@@ -50,4 +50,8 @@ export class CashPayment implements Payment {
   getBalance() {
     return this.balance;
   }
+
+  done(amount: number) {
+    this.balance += amount;
+  }
 }

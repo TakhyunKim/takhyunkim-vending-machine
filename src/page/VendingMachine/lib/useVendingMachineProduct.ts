@@ -13,13 +13,13 @@ export function useVendingMachineProduct({
 }) {
   const [boughtProducts, setBoughtProducts] = useState<Product[]>([]);
 
-  const handleBoughtProduct = (product: Product) => {
+  const buyProduct = (product: Product) => {
     try {
       if (!payment) {
         throw new Error("Payment not found");
       }
 
-      vendingMachine.buyProduct(payment, product);
+      vendingMachine.buyProduct(payment, product.id);
 
       setBoughtProducts((prev) => [...prev, product]);
     } catch (error) {
@@ -27,11 +27,16 @@ export function useVendingMachineProduct({
     }
   };
 
-  const products = vendingMachine.getProducts();
+  const resetBoughtProducts = () => {
+    setBoughtProducts([]);
+  };
+
+  const { products } = vendingMachine.getSnapshot();
 
   return {
     products,
     boughtProducts,
-    handleBoughtProduct,
+    resetBoughtProducts,
+    buyProduct,
   };
 }

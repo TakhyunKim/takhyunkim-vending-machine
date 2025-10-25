@@ -11,6 +11,7 @@ export function useVendingMachinePayment({
   vendingMachine: VendingMachine;
 }) {
   const [userPayment, setUserPayment] = useState<Payment | null>(null);
+  const { cashBalance } = vendingMachine.getSnapshot();
 
   const cashPayment = CASH_PAYMENT;
   const cardPayment = SAMSUNG_CARD_PAYMENT;
@@ -41,13 +42,13 @@ export function useVendingMachinePayment({
     setUserPayment(cardPayment);
   };
 
-  const handleCompleteTransaction = () => {
+  const dispenseChange = () => {
     if (!userPayment) {
       console.error("결제 수단이 없습니다");
       return;
     }
 
-    vendingMachine.dispenseChange();
+    vendingMachine.dispenseChange(userPayment);
     setUserPayment(null);
   };
 
@@ -56,10 +57,10 @@ export function useVendingMachinePayment({
     userCardPayment: cardPayment,
     userPayment,
     hasCard: userPayment === cardPayment,
-    insertedCash: vendingMachine.getCashBalance(),
+    insertedCash: cashBalance,
     insertedCard: userPayment === cardPayment,
     handleInsertCash,
     handleInsertCard,
-    handleCompleteTransaction,
+    dispenseChange,
   };
 }

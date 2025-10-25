@@ -22,10 +22,12 @@ export class Product {
       throw new Error("Product is out of stock");
     }
 
-    this.quantity--;
+    this.quantity -= 1;
+    return this.quantity;
   }
 
   increaseQuantity() {
-    this.quantity++;
+    this.quantity += 1;
+    return this.quantity;
   }
 }

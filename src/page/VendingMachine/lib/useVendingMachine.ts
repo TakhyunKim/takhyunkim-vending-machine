@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useSyncExternalStore } from "react";
 
 import { VendingMachine } from "@/entities/VendingMachine/lib";
 
@@ -11,11 +11,12 @@ export const VENDING_MACHINE = new VendingMachine(
 );
 
 export function useVendingMachine() {
-  const [vendingMachine, setVendingMachine] =
-    useState<VendingMachine>(VENDING_MACHINE);
+  useSyncExternalStore(
+    (callback) => VENDING_MACHINE.subscribe(callback),
+    () => VENDING_MACHINE.getSnapshot()
+  );
 
   return {
-    vendingMachine,
-    setVendingMachine,
+    vendingMachine: VENDING_MACHINE,
   };
 }

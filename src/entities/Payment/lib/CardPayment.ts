@@ -29,4 +29,8 @@ export class CardPayment implements Payment {
   purchase(amount: number) {
     return generateUuid(String(amount));
   }
+
+  done() {
+    return;
+  }
 }

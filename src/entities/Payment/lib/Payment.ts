@@ -27,4 +27,6 @@ export abstract class Payment {
    * @returns 결제 완료 번호
    */
   abstract purchase(amount: number): void;
+
+  abstract done(amount: number): void;
 }

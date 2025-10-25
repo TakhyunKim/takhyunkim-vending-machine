@@ -4,17 +4,52 @@ import type { Dispenser } from "../../Dispenser/lib";
 import type { Change } from "../../Change/lib";
 
 export class VendingMachine {
-  private readonly products: Product[];
   private readonly dispenser: Dispenser;
   private readonly change: Change;
-  // 자판기 내에 현금 잔액
-  private cashBalance: number;
+
+  private snapshot: {
+    products: Product[];
+    cashBalance: number;
+  };
+  private listeners: Set<() => void> = new Set();
 
   constructor(products: Product[], dispenser: Dispenser, change: Change) {
-    this.products = products;
     this.dispenser = dispenser;
     this.change = change;
-    this.cashBalance = 0;
+
+    this.snapshot = {
+      products: products,
+      cashBalance: 0,
+    };
+  }
+
+  /**
+   * @description 상태 변경 구독
+   *
+   * @param listener 상태 변경 시 호출될 콜백
+   * @returns 구독 해제 함수
+   */
+  subscribe(listener: () => void) {
+    this.listeners.add(listener);
+    return () => {
+      this.listeners.delete(listener);
+    };
+  }
+
+  /**
+   * @description 상태 스냅샷 반환
+   *
+   * @returns 현재 상태
+   */
+  getSnapshot() {
+    return this.snapshot;
+  }
+
+  /**
+   * @description 구독자들에게 상태 변경 알림
+   */
+  private notifyListeners() {
+    this.listeners.forEach((listener) => listener());
   }
 
   initPayment(payment: Payment, amount: number) {
@@ -22,8 +57,14 @@ export class VendingMachine {
     this.change.checkLimitBalance();
 
     // 결제 수단 승인
-    const paymentId = payment.authorize(amount);
-    return paymentId;
+    payment.authorize(amount);
+
+    this.snapshot = {
+      ...this.snapshot,
+      cashBalance: this.snapshot.cashBalance + amount,
+    };
+
+    this.notifyListeners();
   }
 
   /**
@@ -33,15 +74,23 @@ export class VendingMachine {
    * @param paymentId 결제 승인 번호
    * @returns 상품 구매 번호
    */
-  buyProduct(payment: Payment, product: Product) {
+  buyProduct(payment: Payment, productId: string) {
     // 상품 선택
-    this.selectProduct(product.id);
+    const product = this.selectProduct(productId);
 
     // 상품 구매
     payment.purchase(product.price);
 
     // 상품 배출
     this.dispenseProduct(product.id);
+
+    this.snapshot = {
+      ...this.snapshot,
+      cashBalance: this.snapshot.cashBalance - product.price,
+    };
+
+    // 상태 변경 알림
+    this.notifyListeners();
   }
 
   /**
@@ -51,22 +100,23 @@ export class VendingMachine {
    *
    * @param payment 결제 수단
    */
-  dispenseChange() {
-    const change = this.change.getChange(this.cashBalance);
-    const totalChange = Object.values(change).reduce(
-      (acc, curr) => acc + curr,
+  dispenseChange(payment: Payment) {
+    const change = this.change.getChange(this.snapshot.cashBalance);
+    const totalChange = Object.entries(change).reduce(
+      (acc, [key, value]) => acc + value * Number(key),
       0
     );
 
-    return totalChange;
-  }
+    payment.done(totalChange);
 
-  getProducts() {
-    return this.products;
-  }
+    // 잔액 초기화
+    this.snapshot = {
+      ...this.snapshot,
+      cashBalance: 0,
+    };
 
-  getCashBalance() {
-    return this.cashBalance;
+    // 상태 변경 알림
+    this.notifyListeners();
   }
 
   /**
@@ -76,7 +126,7 @@ export class VendingMachine {
    * @returns 상품 선택 상태
    */
   private selectProduct(productId: string) {
-    const product = this.products.find(({ id }) => id === productId);
+    const product = this.snapshot.products.find(({ id }) => id === productId);
 
     if (!product) {
       throw new Error("Product not found");
@@ -85,16 +135,24 @@ export class VendingMachine {
     if (!product.isInStock()) {
       throw new Error("Product is out of stock");
     }
+
+    return product;
   }
 
   private dispenseProduct(productId: string) {
-    const product = this.products.find(({ id }) => id === productId);
+    const product = this.snapshot.products.find(({ id }) => id === productId);
 
     if (!product) {
       throw new Error("Product not found");
     }
 
     product.decreaseQuantity();
+
+    this.snapshot = {
+      ...this.snapshot,
+      products: [...this.snapshot.products],
+    };
+
     this.dispenser.dispense(productId);
   }
 }
