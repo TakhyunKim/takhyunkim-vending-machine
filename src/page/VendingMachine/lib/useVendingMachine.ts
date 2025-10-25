@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from "react";
 
-import { VendingMachine } from "@/entities/VendingMachine/lib";
+import { VendingMachine } from "@/entities/VendingMachine";
 
 import { PRODUCTS_MOCK_LIST, DISPENSER_MOCK, CHANGE_MOCK } from "../mock";
 

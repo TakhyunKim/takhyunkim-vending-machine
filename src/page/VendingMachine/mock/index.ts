@@ -1,6 +1,6 @@
-import { Product } from "@/entities/Product/lib";
-import { Change } from "@/entities/Change/lib";
-import { Dispenser } from "@/entities/Dispenser/lib";
+import { Product } from "@/entities/Product";
+import { Change } from "@/entities/Change";
+import { Dispenser } from "@/entities/Dispenser";
 import { CardPayment } from "@/entities/Payment";
 
 export const USER_CASH_MOCK = 50000;

@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import type { Payment } from "@/entities/Payment/lib";
-import type { Product } from "@/entities/Product/lib";
-import type { VendingMachine } from "@/entities/VendingMachine/lib";
+import type { Payment } from "@/entities/Payment";
+import type { Product } from "@/entities/Product";
+import type { VendingMachine } from "@/entities/VendingMachine";
 
 export function useVendingMachineProduct({
   payment,

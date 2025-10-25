@@ -1,4 +1,4 @@
-import type { Product as ProductType } from "../model";
+import type { ProductType } from "../model";
 
 export class Product {
   readonly id: string;

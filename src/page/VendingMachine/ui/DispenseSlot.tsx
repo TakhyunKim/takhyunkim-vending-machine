@@ -1,4 +1,4 @@
-import type { Product } from "@/entities/Product/model";
+import type { Product } from "@/entities/Product";
 
 interface DispenseSlotProps {
   boughtProducts: Product[];

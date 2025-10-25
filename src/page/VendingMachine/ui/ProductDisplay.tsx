@@ -1,4 +1,4 @@
-import type { Product } from "@/entities/Product/lib";
+import type { Product } from "@/entities/Product";
 
 interface ProductDisplayProps {
   products: Product[];

@@ -4,8 +4,8 @@ import { USER_CASH_MOCK, SAMSUNG_CARD_PAYMENT } from "../mock";
 
 import { CardPayment, CashPayment } from "@/entities/Payment";
 
-import type { Payment } from "@/entities/Payment/lib";
-import type { VendingMachine } from "@/entities/VendingMachine/lib";
+import type { Payment } from "@/entities/Payment";
+import type { VendingMachine } from "@/entities/VendingMachine";
 
 export function useVendingMachinePayment({
   vendingMachine,
