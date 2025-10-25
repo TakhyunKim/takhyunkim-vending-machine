@@ -9,8 +9,8 @@ const ACCEPTED_CACHE_LIST = [100, 500, 1000, 5000, 10000] as const;
 export class CashPayment implements Payment {
   private state: PaymentState;
 
-  constructor() {
-    this.state = { state: "idle", balance: 0 };
+  constructor(balance: number) {
+    this.state = { state: "idle", balance };
   }
 
   /**
