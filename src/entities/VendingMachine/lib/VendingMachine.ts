@@ -19,17 +19,13 @@ export class VendingMachine {
   }
 
   async initPayment(payment: Payment, info: unknown) {
-    try {
-      // 잔돈 한도 초과 체크
-      this.change.checkLimitBalance();
+    // 잔돈 한도 초과 체크
+    this.change.checkLimitBalance();
 
-      // 결제 수단 승인
-      const authorizedState = await this.authorizePayment(payment, info);
+    // 결제 수단 승인
+    const authorizedState = await this.authorizePayment(payment, info);
 
-      return authorizedState;
-    } catch (error) {
-      throw new Error("Failed to initialize payment", { cause: error });
-    }
+    return authorizedState;
   }
 
   /**
@@ -40,37 +36,29 @@ export class VendingMachine {
    * @returns 상품 구매 번호
    */
   async buyProduct(payment: Payment, product: Product) {
-    try {
-      // 상품 선택
-      const selectedState = this.selectProduct(product.id);
+    // 상품 선택
+    const selectedState = this.selectProduct(product.id);
 
-      // 상품 구매
-      await payment.purchase(selectedState.paymentId!, product.price);
+    // 상품 구매
+    await payment.purchase(selectedState.paymentId!, product.price);
 
-      // 상품 배출
-      this.dispenseProduct(product.id);
+    // 상품 배출
+    this.dispenseProduct(product.id);
 
-      return this.state;
-    } catch (error) {
-      throw new Error("Failed to buy product", { cause: error });
-    }
+    return this.state;
   }
 
   dispenseChange(payment: Payment) {
-    try {
-      const change = this.change.getChange(payment.getBalance());
-      const totalChange = Object.values(change).reduce(
-        (acc, curr) => acc + curr,
-        0
-      );
+    const change = this.change.getChange(payment.getBalance());
+    const totalChange = Object.values(change).reduce(
+      (acc, curr) => acc + curr,
+      0
+    );
 
-      this.state = {
-        state: "change",
-        change: totalChange,
-      };
-    } catch (error) {
-      throw new Error("Failed to dispense change", { cause: error });
-    }
+    this.state = {
+      state: "change",
+      change: totalChange,
+    };
   }
 
   getProducts() {
@@ -85,22 +73,18 @@ export class VendingMachine {
    * @returns 결제 승인 번호
    */
   private async authorizePayment(payment: Payment, info: unknown) {
-    try {
-      const { paymentId } = await payment.authorize(info);
+    const { paymentId } = await payment.authorize(info);
 
-      if (!paymentId) {
-        throw new Error("Payment ID not found");
-      }
-
-      this.state = {
-        state: "authorized",
-        paymentId,
-      };
-
-      return this.state;
-    } catch (error) {
-      throw new Error("Failed to authorize payment", { cause: error });
+    if (!paymentId) {
+      throw new Error("Payment ID not found");
     }
+
+    this.state = {
+      state: "authorized",
+      paymentId,
+    };
+
+    return this.state;
   }
 
   /**
@@ -134,16 +118,12 @@ export class VendingMachine {
   }
 
   private dispenseProduct(productId: string) {
-    try {
-      if (this.state.state !== "purchased") {
-        throw new Error("Product not purchased");
-      }
-
-      this.dispenser.dispense(productId);
-
-      this.state = { state: "dispensing", productId };
-    } catch (error) {
-      throw new Error("Failed to dispense product", { cause: error });
+    if (this.state.state !== "purchased") {
+      throw new Error("Product not purchased");
     }
+
+    this.dispenser.dispense(productId);
+
+    this.state = { state: "dispensing", productId };
   }
 }
