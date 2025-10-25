@@ -1,15 +1,14 @@
 import { Payment } from "./Payment";
-import { CardGateway } from "./CardGateway";
+
+import { generateUuid } from "@/shared/lib";
 
 import type { CardPaymentInfo } from "../model";
 
 export class CardPayment implements Payment {
   private readonly info: CardPaymentInfo;
-  private readonly cardGateway: CardGateway;
 
-  constructor(info: CardPaymentInfo, cardGateway: CardGateway) {
+  constructor(info: CardPaymentInfo) {
     this.info = info;
-    this.cardGateway = cardGateway;
   }
 
   /**
@@ -19,8 +18,7 @@ export class CardPayment implements Payment {
    * 결제 가능하다는 점을 카드사로부터 확인 받은 상태
    */
   async authorize() {
-    const { paymentId } = await this.cardGateway.authorize(this.info);
-    return paymentId;
+    return Promise.resolve({ paymentId: generateUuid(this.info.cardNumber) });
   }
 
   /**
@@ -29,7 +27,8 @@ export class CardPayment implements Payment {
    * 카드로 구매하는 과정
    */
   async purchase(amount: number) {
-    const { paymentId } = await this.cardGateway.purchase(amount);
-    return paymentId;
+    return Promise.resolve({
+      paymentId: generateUuid(String(amount)),
+    });
   }
 }

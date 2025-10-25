@@ -1,24 +1,16 @@
 import { Product } from "@/entities/Product/lib";
 import { Change } from "@/entities/Change/lib";
 import { Dispenser } from "@/entities/Dispenser/lib";
-import {
-  CashPayment,
-  CardPayment,
-  SamsungCardGateway,
-} from "@/entities/Payment";
+import { CashPayment, CardPayment } from "@/entities/Payment";
 
 export const USER_CASH_MOCK = 50000;
 export const CASH_PAYMENT = new CashPayment(USER_CASH_MOCK);
 
-export const SAMSUNG_CARD_GATEWAY = new SamsungCardGateway();
-export const SAMSUNG_CARD_PAYMENT = new CardPayment(
-  {
-    cardNumber: "1234567890123456",
-    cardExpirationDate: "202512",
-    cardCvv: "123",
-  },
-  SAMSUNG_CARD_GATEWAY
-);
+export const SAMSUNG_CARD_PAYMENT = new CardPayment({
+  cardNumber: "1234567890123456",
+  cardExpirationDate: "202512",
+  cardCvv: "123",
+});
 
 export const CHANGE_MOCK = new Change(100, 100, 100, 100, 100);
 
