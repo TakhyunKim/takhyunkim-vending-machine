@@ -19,7 +19,7 @@ export class Product {
 
   decreaseQuantity() {
     if (!this.isInStock()) {
-      throw new Error("Product is out of stock");
+      throw new Error("제품이 품절되었습니다");
     }
 
     this.quantity -= 1;

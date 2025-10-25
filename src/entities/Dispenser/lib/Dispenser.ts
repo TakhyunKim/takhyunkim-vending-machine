@@ -32,7 +32,7 @@ export class Dispenser {
    * @param productPosition 이동할 상품 배열 포지션
    */
   private moveToPosition(productPosition: number) {
-    console.log(`[Dispenser] Moving to index ${productPosition}`);
+    console.log(`[Dispenser] ${productPosition} 위치로 이동합니다`);
   }
 
   /**
@@ -41,7 +41,7 @@ export class Dispenser {
    * @param productPosition 현재 상품 배열 포지션
    */
   private rotateMotor(productPosition: number) {
-    console.log(`[Dispenser] Rotating motor at index ${productPosition}`);
+    console.log(`[Dispenser] ${productPosition} 위치로 모터를 회전합니다`);
   }
 
   /**
@@ -50,6 +50,6 @@ export class Dispenser {
    * @param productPosition 상품 배열 포지션
    */
   private dispenseToSlot(productPosition: number) {
-    console.log(`[Dispenser] Product dispensed from index ${productPosition}`);
+    console.log(`[Dispenser] ${productPosition} 위치의 상품을 배출합니다`);
   }
 }

@@ -129,11 +129,11 @@ export class VendingMachine {
     const product = this.snapshot.products.find(({ id }) => id === productId);
 
     if (!product) {
-      throw new Error("Product not found");
+      throw new Error("제품을 찾을 수 없습니다. 관리자에게 문의해주세요");
     }
 
     if (!product.isInStock()) {
-      throw new Error("Product is out of stock");
+      throw new Error("제품이 품절되었습니다");
     }
 
     return product;
@@ -143,7 +143,7 @@ export class VendingMachine {
     const product = this.snapshot.products.find(({ id }) => id === productId);
 
     if (!product) {
-      throw new Error("Product not found");
+      throw new Error("제품을 찾을 수 없습니다. 관리자에게 문의해주세요");
     }
 
     product.decreaseQuantity();

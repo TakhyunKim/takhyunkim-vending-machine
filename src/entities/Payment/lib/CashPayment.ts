@@ -21,7 +21,7 @@ export class CashPayment implements Payment {
     const isAccepted = ACCEPTED_CACHE_LIST.some((cache) => cache === amount);
 
     if (!isAccepted) {
-      throw new Error("Invalid amount");
+      throw new Error("지원하지 않는 화폐 단위입니다");
     }
 
     const paymentId = generateUuid(amount.toString());
@@ -35,7 +35,7 @@ export class CashPayment implements Payment {
    */
   purchase(amount: number) {
     if (this.balance < amount) {
-      throw new Error("Insufficient balance");
+      throw new Error("잔액이 부족합니다");
     }
 
     this.balance -= amount;
