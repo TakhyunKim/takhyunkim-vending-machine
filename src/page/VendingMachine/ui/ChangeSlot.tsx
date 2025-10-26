@@ -30,40 +30,7 @@ export function ChangeSlot() {
           gap: "8px",
           border: "2px solid #7f8c8d",
         }}
-      >
-        <div
-          style={{
-            width: "30px",
-            height: "30px",
-            backgroundColor: "#f39c12",
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "10px",
-            fontWeight: "bold",
-            color: "#fff",
-          }}
-        >
-          500
-        </div>
-        <div
-          style={{
-            width: "30px",
-            height: "30px",
-            backgroundColor: "#e67e22",
-            borderRadius: "50%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "10px",
-            fontWeight: "bold",
-            color: "#fff",
-          }}
-        >
-          100
-        </div>
-      </div>
+      />
     </div>
   );
 }
