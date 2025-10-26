@@ -1,55 +1,31 @@
+import { Subscribable } from "../../../shared/lib";
+
 import type { Product } from "../../Product/lib";
 import type { Payment } from "../../Payment/lib";
 import type { Dispenser } from "../../Dispenser/lib";
 import type { Change } from "../../Change/lib";
 
-export class VendingMachine {
+interface VendingMachineSnapshot {
+  products: Product[];
+  cashBalance: number;
+}
+
+export class VendingMachine extends Subscribable<
+  () => void,
+  VendingMachineSnapshot
+> {
   private readonly dispenser: Dispenser;
   private readonly change: Change;
 
-  private snapshot: {
-    products: Product[];
-    cashBalance: number;
-  };
-  private listeners: Set<() => void> = new Set();
-
   constructor(products: Product[], dispenser: Dispenser, change: Change) {
-    this.dispenser = dispenser;
-    this.change = change;
-
-    this.snapshot = {
-      products: products,
+    const snapshot: VendingMachineSnapshot = {
+      products,
       cashBalance: 0,
     };
-  }
+    super(snapshot);
 
-  /**
-   * @description 상태 변경 구독
-   *
-   * @param listener 상태 변경 시 호출될 콜백
-   * @returns 구독 해제 함수
-   */
-  subscribe(listener: () => void) {
-    this.listeners.add(listener);
-    return () => {
-      this.listeners.delete(listener);
-    };
-  }
-
-  /**
-   * @description 상태 스냅샷 반환
-   *
-   * @returns 현재 상태
-   */
-  getSnapshot() {
-    return this.snapshot;
-  }
-
-  /**
-   * @description 구독자들에게 상태 변경 알림
-   */
-  private notifyListeners() {
-    this.listeners.forEach((listener) => listener());
+    this.dispenser = dispenser;
+    this.change = change;
   }
 
   initPayment(payment: Payment, amount: number) {
@@ -154,5 +130,13 @@ export class VendingMachine {
     );
 
     this.dispenser.dispense(productPosition);
+  }
+
+  protected onSubscribe() {
+    this.notifyListeners();
+  }
+
+  protected onUnsubscribe() {
+    this.listeners.clear();
   }
 }
