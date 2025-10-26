@@ -1,3 +1,6 @@
+import { useState } from "react";
+
+import { Admin } from "./Admin";
 import { ProductDisplay } from "./ProductDisplay";
 import { CardSlot } from "./CardSlot";
 import { CashSlot } from "./CashSlot";
@@ -11,6 +14,8 @@ import { useVendingMachinePayment } from "../lib/useVendingMachinePayment";
 import { useVendingMachineProduct } from "../lib/useVendingMachineProduct";
 
 export function VendingMachinePage() {
+  const [isOpenAdminDialog, setIsOpenAdminDialog] = useState(false);
+
   const { vendingMachine } = useVendingMachine();
   const {
     userCash,
@@ -21,11 +26,16 @@ export function VendingMachinePage() {
     handleInsertCard,
     dispenseChange,
   } = useVendingMachinePayment({ vendingMachine });
-  const { products, boughtProducts, buyProduct, resetBoughtProducts } =
-    useVendingMachineProduct({
-      vendingMachine,
-      payment: userPayment,
-    });
+  const {
+    products,
+    boughtProducts,
+    buyProduct,
+    resetBoughtProducts,
+    addProduct,
+  } = useVendingMachineProduct({
+    vendingMachine,
+    payment: userPayment,
+  });
 
   return (
     <VendingMachineContainer>
@@ -66,7 +76,23 @@ export function VendingMachinePage() {
             resetBoughtProducts();
           }}
         />
+        <button onClick={() => setIsOpenAdminDialog(true)}>
+          관리자 페이지
+        </button>
       </Container>
+
+      {isOpenAdminDialog && (
+        <dialog
+          open={isOpenAdminDialog}
+          closedby="any"
+          onClose={() => setIsOpenAdminDialog(false)}
+        >
+          <Admin
+            supportedProductList={products}
+            onAddProduct={(product) => addProduct(product)}
+          />
+        </dialog>
+      )}
     </VendingMachineContainer>
   );
 }

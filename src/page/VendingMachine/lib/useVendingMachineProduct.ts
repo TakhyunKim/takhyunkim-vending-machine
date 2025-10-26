@@ -37,6 +37,18 @@ export function useVendingMachineProduct({
     setBoughtProducts([]);
   };
 
+  const addProduct = ({
+    name,
+    price,
+    quantity,
+  }: {
+    name: string;
+    price: number;
+    quantity: number;
+  }) => {
+    vendingMachine.addProduct({ name, price, quantity });
+  };
+
   const { products } = vendingMachine.getSnapshot();
 
   return {
@@ -44,5 +56,6 @@ export function useVendingMachineProduct({
     boughtProducts,
     resetBoughtProducts,
     buyProduct,
+    addProduct,
   };
 }
