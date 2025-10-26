@@ -30,7 +30,12 @@ export class CardPayment implements Payment {
    * @returns 결제 잔액(카드는 잔액이 없음)
    */
   purchase() {
-    console.log("[CardPayment] 카드 구매");
+    const randomResult = Math.random();
+
+    if (randomResult < 0.1) {
+      throw new Error("결제 실패");
+    }
+
     return 0;
   }
 
