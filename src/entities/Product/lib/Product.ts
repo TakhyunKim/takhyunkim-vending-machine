@@ -30,4 +30,8 @@ export class Product {
     this.quantity += 1;
     return this.quantity;
   }
+
+  getQuantity() {
+    return this.quantity;
+  }
 }

@@ -19,7 +19,7 @@ describe("Product", () => {
       expect(product.id).toBe("product-1");
       expect(product.name).toBe("콜라");
       expect(product.price).toBe(1000);
-      expect(product.quantity).toBe(10);
+      expect(product.getQuantity()).toBe(10);
     });
 
     test("여러 상품 인스턴스를 독립적으로 생성할 수 있다", () => {
@@ -85,7 +85,7 @@ describe("Product", () => {
       const newQuantity = product.decreaseQuantity();
 
       expect(newQuantity).toBe(9);
-      expect(product.quantity).toBe(9);
+      expect(product.getQuantity()).toBe(9);
     });
 
     test("여러 번 재고를 감소시킬 수 있다", () => {
@@ -95,13 +95,13 @@ describe("Product", () => {
       });
 
       product.decreaseQuantity();
-      expect(product.quantity).toBe(4);
+      expect(product.getQuantity()).toBe(4);
 
       product.decreaseQuantity();
-      expect(product.quantity).toBe(3);
+      expect(product.getQuantity()).toBe(3);
 
       product.decreaseQuantity();
-      expect(product.quantity).toBe(2);
+      expect(product.getQuantity()).toBe(2);
     });
 
     test("재고가 1개일 때 감소시키면 0이 된다", () => {
@@ -113,7 +113,7 @@ describe("Product", () => {
       const newQuantity = product.decreaseQuantity();
 
       expect(newQuantity).toBe(0);
-      expect(product.quantity).toBe(0);
+      expect(product.getQuantity()).toBe(0);
     });
 
     test("재고가 0일 때 에러 발생 후 재고는 변하지 않는다", () => {
@@ -123,7 +123,7 @@ describe("Product", () => {
       });
 
       expect(() => product.decreaseQuantity()).toThrow("제품이 품절되었습니다");
-      expect(product.quantity).toBe(0);
+      expect(product.getQuantity()).toBe(0);
     });
   });
 
@@ -133,7 +133,7 @@ describe("Product", () => {
       const newQuantity = product.increaseQuantity();
 
       expect(newQuantity).toBe(11);
-      expect(product.quantity).toBe(11);
+      expect(product.getQuantity()).toBe(11);
     });
 
     test("여러 번 재고를 증가시킬 수 있다", () => {
@@ -143,13 +143,13 @@ describe("Product", () => {
       });
 
       product.increaseQuantity();
-      expect(product.quantity).toBe(1);
+      expect(product.getQuantity()).toBe(1);
 
       product.increaseQuantity();
-      expect(product.quantity).toBe(2);
+      expect(product.getQuantity()).toBe(2);
 
       product.increaseQuantity();
-      expect(product.quantity).toBe(3);
+      expect(product.getQuantity()).toBe(3);
     });
 
     test("재고 감소 후 다시 증가시킬 수 있다", () => {
@@ -159,10 +159,10 @@ describe("Product", () => {
       });
 
       product.decreaseQuantity(); // 4
-      expect(product.quantity).toBe(4);
+      expect(product.getQuantity()).toBe(4);
 
       product.increaseQuantity(); // 5
-      expect(product.quantity).toBe(5);
+      expect(product.getQuantity()).toBe(5);
     });
   });
 
@@ -180,7 +180,7 @@ describe("Product", () => {
       product.increaseQuantity(); // 4
       product.increaseQuantity(); // 5
 
-      expect(product.quantity).toBe(5);
+      expect(product.getQuantity()).toBe(5);
     });
 
     test("재고를 모두 소진 후 다시 충전할 수 있다", () => {
@@ -219,8 +219,8 @@ describe("Product", () => {
       cider.decreaseQuantity();
       cider.decreaseQuantity();
 
-      expect(cola.quantity).toBe(4);
-      expect(cider.quantity).toBe(1);
+      expect(cola.getQuantity()).toBe(4);
+      expect(cider.getQuantity()).toBe(1);
     });
   });
 });
