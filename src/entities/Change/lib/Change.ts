@@ -113,7 +113,7 @@ export class Change {
 
     // 정확히 거슬러 줄 수 없으면 에러
     if (remaining > 0) {
-      throw new Error("잔돈이 부족합니다");
+      throw new Error("잔돈이 부족합니다. 관리자에게 문의해주세요.");
     }
 
     // 계산 성공 시 실제 잔액 차감
