@@ -15,7 +15,6 @@ export function ProductDisplay({
         backgroundColor: "#34495e",
         borderRadius: "15px",
         padding: "15px",
-        height: "150px",
         border: "3px solid #1a252f",
       }}
     >
