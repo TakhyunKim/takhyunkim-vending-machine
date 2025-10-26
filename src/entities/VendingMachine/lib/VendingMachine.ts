@@ -84,8 +84,11 @@ export class VendingMachine {
     // 상품 배출
     this.dispenseProduct(product.id);
 
+    // 상품 재고 감소
+    product.decreaseQuantity();
+
     this.snapshot = {
-      ...this.snapshot,
+      products: [...this.snapshot.products],
       cashBalance: remainingBalance,
     };
 
@@ -146,16 +149,10 @@ export class VendingMachine {
       throw new Error("제품을 찾을 수 없습니다. 관리자에게 문의해주세요");
     }
 
-    product.decreaseQuantity();
-
-    this.snapshot = {
-      ...this.snapshot,
-      products: [...this.snapshot.products],
-    };
-
     const productPosition = this.snapshot.products.findIndex(
       ({ id }) => id === productId
     );
+
     this.dispenser.dispense(productPosition);
   }
 }
