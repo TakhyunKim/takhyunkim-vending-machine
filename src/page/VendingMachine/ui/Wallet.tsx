@@ -11,7 +11,7 @@ export function Wallet({
   onInsertCard,
   hasCard,
 }: WalletProps) {
-  const cashOptions = [1000, 5000, 10000] as const;
+  const cashOptions = [1000, 5000, 10000, 50000] as const;
 
   return (
     <div
