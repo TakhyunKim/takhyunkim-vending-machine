@@ -4,7 +4,7 @@ export class Product {
   readonly id: string;
   readonly name: string;
   readonly price: number;
-  quantity: number;
+  private quantity: number;
 
   constructor(product: ProductType) {
     this.id = product.id;
