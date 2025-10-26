@@ -1,6 +1,7 @@
-import { Subscribable } from "../../../shared/lib";
+import { generateUuid, Subscribable } from "@/shared/lib";
 
-import type { Product } from "../../Product/lib";
+import { Product } from "../../Product/lib";
+
 import type { Payment } from "../../Payment/lib";
 import type { Dispenser } from "../../Dispenser/lib";
 import type { Change } from "../../Change/lib";
@@ -28,6 +29,16 @@ export class VendingMachine extends Subscribable<
     this.change = change;
   }
 
+  /** ========================= User API Methods ========================= **/
+
+  /**
+   * @description 결제 수단 초기화
+   *
+   * 결제 수단을 초기화하는 과정
+   *
+   * @param payment 결제 수단
+   * @param amount 결제 금액
+   */
   initPayment(payment: Payment, amount: number) {
     // 잔돈 한도 초과 체크
     this.change.checkLimitBalance();
@@ -131,6 +142,64 @@ export class VendingMachine extends Subscribable<
 
     this.dispenser.dispense(productPosition);
   }
+
+  /** ========================= Admin API Methods ========================= **/
+  /**
+   * @description 상품 추가
+   *
+   * 상품을 추가하는 과정
+   *
+   * @param product 추가할 상품
+   */
+  addProduct({
+    name,
+    price,
+    quantity,
+  }: {
+    name: string;
+    price: number;
+    quantity: number;
+  }) {
+    const product = new Product({
+      id: generateUuid(`product-${name}`),
+      name,
+      price,
+      quantity,
+    });
+
+    this.snapshot = {
+      ...this.snapshot,
+      products: [...this.snapshot.products, product],
+    };
+
+    this.notifyListeners();
+  }
+
+  /**
+   * @description 상품 재고 증가
+   *
+   * 상품 재고를 증가시키는 과정
+   *
+   * @param productId 상품 ID
+   */
+  increaseProductQuantity(productId: string) {
+    const product = this.snapshot.products.find(({ id }) => id === productId);
+
+    if (!product) {
+      throw new Error("제품을 찾을 수 없습니다. 관리자에게 문의해주세요");
+    }
+
+    product.increaseQuantity();
+
+    this.snapshot = {
+      ...this.snapshot,
+      products: [...this.snapshot.products],
+    };
+
+    this.notifyListeners();
+  }
+
+  /** ========================= Connected with External Systems Methods ========================= **/
 
   protected onSubscribe() {
     this.notifyListeners();
