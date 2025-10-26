@@ -70,7 +70,15 @@ export function ProductDisplay({
               🥤{" "}
               <p style={{ fontSize: "12px", color: "#000000" }}>
                 {" "}
-                {product.name}{" "}
+                <span style={{ fontSize: "12px", color: "#000000" }}>
+                  {product.name}
+                </span>
+                {!product.isInStock() && (
+                  <span style={{ fontSize: "12px", color: "#ff0000" }}>
+                    {" "}
+                    품절
+                  </span>
+                )}
               </p>
               <div style={{ fontSize: "12px", color: "#000000" }}>
                 {product.price}원
