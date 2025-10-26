@@ -18,18 +18,27 @@ export class CardPayment implements Payment {
    * 결제 가능하다는 점을 카드사로부터 확인 받은 상태
    */
   authorize() {
-    return generateUuid(this.info.cardNumber);
+    const paymentId = generateUuid(this.info.cardNumber);
+    return paymentId;
   }
 
   /**
    * @description 카드 구매
    *
    * 카드로 구매하는 과정
+   *
+   * @returns 결제 잔액(카드는 잔액이 없음)
    */
-  purchase(amount: number) {
-    return generateUuid(String(amount));
+  purchase() {
+    console.log("[CardPayment] 카드 구매");
+    return 0;
   }
 
+  /**
+   * @description 카드 잔액 조회
+   *
+   * @returns 카드 잔액(카드는 잔액이 없음)
+   */
   getBalance() {
     return 0;
   }

@@ -79,14 +79,14 @@ export class VendingMachine {
     const product = this.selectProduct(productId);
 
     // 상품 구매
-    payment.purchase(product.price);
+    const remainingBalance = payment.purchase(product.price);
 
     // 상품 배출
     this.dispenseProduct(product.id);
 
     this.snapshot = {
       ...this.snapshot,
-      cashBalance: this.snapshot.cashBalance - product.price,
+      cashBalance: remainingBalance,
     };
 
     // 상태 변경 알림

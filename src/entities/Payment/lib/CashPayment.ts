@@ -39,6 +39,7 @@ export class CashPayment implements Payment {
     }
 
     this.balance -= amount;
+    return this.balance;
   }
 
   getBalance() {

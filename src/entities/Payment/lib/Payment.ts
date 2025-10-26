@@ -24,9 +24,9 @@ export abstract class Payment {
    *
    * @param paymentId 결제 승인 번호
    * @param amount 결제 금액
-   * @returns 결제 완료 번호
+   * @returns 결제 후 잔액
    */
-  abstract purchase(amount: number): void;
+  abstract purchase(amount: number): number;
 
   abstract getBalance(): number;
 }
